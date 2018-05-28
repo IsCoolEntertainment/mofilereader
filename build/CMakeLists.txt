@@ -18,9 +18,6 @@
 cmake_minimum_required(VERSION 2.6)
 project(moFileReader)
 
-# The main include directory
-include_directories(BEFORE ../include)
-
 option(COMPILE_APP "Set this to ON if you want to compile the app (default)." ON)
 
 # executable build directory
@@ -47,12 +44,28 @@ else ( COMPILE_DLL )
 
 endif ()
 
+# The main include directory
+target_include_directories(
+  moFileReader
+  PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../include>
+  $<INSTALL_INTERFACE:include>
+  )
+
+
 install(
   TARGETS moFileReader
   DESTINATION lib
+  EXPORT moFileReader
   )
 
 install(
   DIRECTORY ../include/
   DESTINATION include
+  )
+
+install(
+  EXPORT moFileReader
+  DESTINATION lib/cmake/moFileReader/
+  FILE moFileReader-config.cmake
   )
